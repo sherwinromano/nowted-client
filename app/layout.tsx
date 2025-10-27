@@ -4,6 +4,7 @@ import "./globals.css";
 import Image from "next/image";
 import Folders from "./components/navigation/Folders";
 import More from "./components/navigation/More";
+import Link from "next/link";
 
 const sourceSans = Source_Sans_3({
   variable: "--font-source-sans-3",
@@ -25,7 +26,7 @@ export default function RootLayout({
       <body
         className={`${sourceSans.variable} flex bg-primary antialiased h-screen`}
       >
-        <nav className="basis-[30%] py-6 text-secondary flex flex-col gap-7">
+        <nav className="xs:hidden lg:flex basis-[30%] py-6 text-secondary flex-col gap-7">
           <div className="flex flex-col gap-4 px-4">
             <div className="flex justify-between items-center">
               <Image
@@ -34,18 +35,20 @@ export default function RootLayout({
                 height={100}
                 width={100}
               />
-              <button className="grid place-items-center cursor-pointer">
-                <Image
-                  src={"/magnifying-glass.svg"}
-                  alt="Magnifying glass icon"
-                  height={20}
-                  width={20}
-                />
-              </button>
             </div>
-            <button className="bg-[#242424] flex justify-center gap-2 p-2.5 cursor-pointer rounded-xs">
-              <Image src={"/plus.svg"} alt="Plus icon" height={18} width={18} />
-              <span className="font-semibold text-primary">New note</span>
+            <button className="bg-[#242424] flex cursor-pointer rounded-xs">
+              <Link
+                href={"/new-note"}
+                className="flex justify-center gap-2 p-2.5 basis-full"
+              >
+                <Image
+                  src={"/plus.svg"}
+                  alt="Plus icon"
+                  height={18}
+                  width={18}
+                />
+                <span className="font-semibold text-primary">New note</span>
+              </Link>
             </button>
           </div>
           <div className="flex flex-col gap-2">

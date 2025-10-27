@@ -31,3 +31,8 @@
 .text-tertiary {
   color: #7b7b7b;
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

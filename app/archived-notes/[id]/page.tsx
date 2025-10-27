@@ -4,14 +4,14 @@ import NoteDescription from "@/app/components/ui/NoteDescription";
 import { URLAction } from "@/app/utils";
 import Image from "next/image";
 
-const PersonalNote = async ({
+const ArchivedNote = async ({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) => {
   const { id } = await params;
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_URL}/api/personal/${id}`,
+    `${process.env.NEXT_PUBLIC_API_URL}/api/archived/${id}`,
     {
       cache: "no-store",
     }
@@ -20,39 +20,19 @@ const PersonalNote = async ({
 
   const dropdown_children = [
     {
-      label: "Add to favorites",
-      image: {
-        src: "/star.svg",
-        alt: "Star icon",
-      },
-      action: URLAction("personal", "favorites", id),
-      method: "POST",
-      path: "/favorites",
-    },
-    {
-      label: "Archived",
-      image: {
-        src: "/doc-box.svg",
-        alt: "Doc box icon",
-      },
-      action: URLAction("personal", "archived", id),
-      method: "POST",
-      path: "/archived-notes",
-    },
-    {
       label: "Trash",
       image: {
         src: "/trash-bin.svg",
         alt: "Trash bin icon",
       },
-      action: URLAction("personal", "trash", id),
+      action: URLAction("archived", "trash", id),
       method: "DELETE",
       path: "/trash",
     },
   ];
 
   return (
-    <section className="basis-full xs:p-0 lg:p-7 flex flex-col gap-7">
+    <section className="basis-full p-7 flex flex-col gap-7">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-semibold text-primary">{note.title}</h1>
         <MenuDropdown
@@ -62,7 +42,7 @@ const PersonalNote = async ({
         />
       </div>
       <div className="flex flex-col">
-        <div className="flex xs:justify-between md:justify-normal pb-3.5">
+        <div className="flex pb-3.5">
           <div className="flex items-center gap-3.5 basis-[20%]">
             <Image
               src={"/calendar.svg"}
@@ -76,7 +56,7 @@ const PersonalNote = async ({
             {note.date}
           </p>
         </div>
-        <div className="flex py-3.5 xs:justify-between md:justify-normal border-y-2 border-[#2f2f2f]">
+        <div className="flex py-3.5 border-y-2 border-[#2f2f2f]">
           <div className="flex items-center gap-3.5 basis-[20%]">
             <Image
               src={"/folder-closed.svg"}
@@ -87,7 +67,7 @@ const PersonalNote = async ({
             <span className="font-semibold text-sm text-secondary">Folder</span>
           </div>
           <p className="font-semibold underline text-primary text-sm">
-            Personal
+            Archived notes
           </p>
         </div>
       </div>
@@ -96,4 +76,4 @@ const PersonalNote = async ({
   );
 };
 
-export default PersonalNote;
+export default ArchivedNote;

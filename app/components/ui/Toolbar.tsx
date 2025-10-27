@@ -32,7 +32,7 @@ const Toolbar = ({
   ];
 
   return (
-    <div className="flex gap-2.5">
+    <div className="xs:hidden lg:flex gap-2.5">
       {textSettings.map((item, index) => {
         return (
           <button

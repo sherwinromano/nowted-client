@@ -1,7 +1,7 @@
 import NotesList from "../components/ui/NotesList";
 
 const WorkLayout = async ({ children }: { children: React.ReactNode }) => {
-  const req = await fetch(`${process.env.BASE_URL}/api/work`, {
+  const req = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/work`, {
     cache: "no-store",
   });
   const notes = await req.json();

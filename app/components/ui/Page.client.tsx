@@ -45,7 +45,7 @@ const Page = ({ title, id, category, dropdown_children }: PageProps) => {
     const fetchNote = async () => {
       try {
         const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_URL}/api/${category}/${id}`,
+          `${process.env.NEXT_PUBLIC_API_URL}api/${category}/${id}`,
           {
             headers: {
               "x-user-email": session?.user?.email || "",

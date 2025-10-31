@@ -16,7 +16,7 @@ const DesktopLayout = ({ title, category, children }: LayoutProps) => {
 
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/${category}`,
+        `${process.env.NEXT_PUBLIC_API_URL}api/${category}`,
         {
           cache: "no-store",
           headers: { "x-user-email": session.user.email },

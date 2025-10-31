@@ -2,9 +2,10 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useSession } from "next-auth/react";
-import NotesList from "../ui/NotesList.client";
+import NotesList from "../ui/NotesList";
 import { LayoutProps, Note } from "@/app/types";
 import Loader from "../ui/Loader";
+import { DragEndEvent } from "@dnd-kit/core";
 
 const DesktopLayout = ({ title, category, children }: LayoutProps) => {
   const { data: session, status } = useSession();
@@ -32,12 +33,13 @@ const DesktopLayout = ({ title, category, children }: LayoutProps) => {
   }, [session?.user?.email, category]);
 
   const handleDragEnd = useCallback(
-    async (event: any) => {
+    async (event: DragEndEvent) => {
       const { active, over } = event;
       if (!over || active.id === over.id) return;
 
       setNotes((prevNotes) => {
         const updated = [...prevNotes];
+
         const oldIndex = updated.findIndex((n) => n.id === active.id);
         const newIndex = updated.findIndex((n) => n.id === over.id);
 

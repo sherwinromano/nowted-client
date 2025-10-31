@@ -18,6 +18,16 @@ type DropdownChildren = {
   path: string;
 };
 
+type Note = {
+  id: number;
+  title: string;
+  date: string;
+  description: string;
+  email: string;
+  category?: string;
+  position?: number;
+};
+
 type PageProps = {
   title: string;
   id: string;
@@ -27,7 +37,7 @@ type PageProps = {
 
 const Page = ({ title, id, category, dropdown_children }: PageProps) => {
   const { data: session, status } = useSession();
-  const [note, setNote] = useState<any>(null);
+  const [note, setNote] = useState<Note | null>(null);
 
   useEffect(() => {
     if (status !== "authenticated") return;
@@ -48,22 +58,25 @@ const Page = ({ title, id, category, dropdown_children }: PageProps) => {
           throw new Error(errData.error || `Error: ${res.status}`);
         }
 
-        const data = await res.json();
+        const data: Note = await res.json();
         setNote(data);
-      } catch (err: any) {
-        console.error(err);
+      } catch (err) {
+        // ✅ Type-safe error handling
+        if (err instanceof Error) {
+          console.error("Fetch error:", err.message);
+        } else {
+          console.error("Unknown error:", err);
+        }
       }
     };
 
     fetchNote();
-  }, [id, session, status]);
+  }, [id, category, session, status]); // ✅ added `category`
 
   return (
     <section className="basis-full xs:p-0 lg:p-7 flex flex-col gap-7">
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-semibold text-primary">
-          {note && note.title}
-        </h1>
+        <h1 className="text-2xl font-semibold text-primary">{note?.title}</h1>
         <MenuDropdown>
           <MenuDropdownChildren dropdown_children={dropdown_children} />
         </MenuDropdown>
@@ -81,7 +94,7 @@ const Page = ({ title, id, category, dropdown_children }: PageProps) => {
             <span className="font-semibold text-sm text-secondary">Date</span>
           </div>
           <p className="font-semibold underline text-primary text-sm">
-            {note && note.date}
+            {note?.date}
           </p>
         </div>
 
@@ -100,6 +113,7 @@ const Page = ({ title, id, category, dropdown_children }: PageProps) => {
           </p>
         </div>
       </div>
+
       {note && <NoteDescription note={note.description} />}
     </section>
   );

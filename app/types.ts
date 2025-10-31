@@ -1,3 +1,4 @@
+import { DragEndEvent } from "@dnd-kit/core";
 import { Dispatch, SetStateAction } from "react";
 
 type DropdownItem = {
@@ -32,7 +33,7 @@ export type NotesListProps = {
   title: string;
   category: string;
   notes?: Note[];
-  handleDragEnd: (event: any) => void;
+  handleDragEnd: (event: DragEndEvent) => void;
   className: string;
 };
 

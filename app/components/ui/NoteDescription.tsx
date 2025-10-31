@@ -33,13 +33,10 @@ const NoteDescription = ({ note }: { note: string }) => {
             label={fontSize}
             borderColor="border-[#2f2f2f]"
             width="w-[5rem]"
-            children={
-              <FontSizeDropdown
-                fontSizes={fontSizes}
-                setFontSize={setFontSize}
-              />
-            }
-          />
+          >
+            <FontSizeDropdown fontSizes={fontSizes} setFontSize={setFontSize} />
+          </Dropdown>
+
           <Toolbar
             onToggleBold={() => setIsBold((prev) => !prev)}
             onToggleItalic={() => setIsItalic((prev) => !prev)}

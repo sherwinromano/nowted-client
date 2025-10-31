@@ -5,8 +5,9 @@ import MobileHeader from "../ui/MobileHeader";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { SessionContextValue, useSession } from "next-auth/react";
-import NotesList from "../ui/NotesList.client";
+import NotesList from "../ui/NotesList";
 import DesktopLoader from "../ui/Loader";
+import { DragEndEvent } from "@dnd-kit/core";
 
 const MobileLayout = ({ title, category, children }: LayoutProps) => {
   const pathname = usePathname() ?? "";
@@ -39,7 +40,7 @@ const MobileLayout = ({ title, category, children }: LayoutProps) => {
   }, [session?.user?.email, category]);
 
   const handleDragEnd = useCallback(
-    async (event: any) => {
+    async (event: DragEndEvent) => {
       const { active, over } = event;
       if (!over || active.id === over.id) return;
 

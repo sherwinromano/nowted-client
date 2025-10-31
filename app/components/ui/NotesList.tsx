@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { NotesListProps, NoteCardProps } from "@/app/types";
 import {
+  closestCorners,
   DndContext,
   MouseSensor,
   useSensor,
   useSensors,
-  closestCorners,
 } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -15,9 +16,8 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { NotesListProps, NoteCardProps } from "@/app/types";
 
-const NotesListClient = ({
+const NotesList = ({
   title,
   category,
   notes,
@@ -25,19 +25,23 @@ const NotesListClient = ({
   className,
 }: NotesListProps) => {
   const [isDragging, setIsDragging] = useState(false);
-  const notesArray = Array.isArray(notes) ? notes : [];
+  const [dragEndedRecently, setDragEndedRecently] = useState(false);
+  const dragTimeout = useRef<NodeJS.Timeout | null>(null);
 
+  const notesArray = Array.isArray(notes) ? notes : [];
   const sensors = useSensors(
     useSensor(MouseSensor, {
-      activationConstraint: { distance: 5 },
+      activationConstraint: {
+        distance: 5,
+      },
     })
   );
 
   const NoteCard = ({ notes }: NoteCardProps) => {
     return notes.map((note) => {
-      const id = note.id;
       const text = note.description ?? "";
       const shortText = text.length > 15 ? text.slice(0, 15) + "..." : text;
+      const id = note.id;
 
       const { attributes, listeners, setNodeRef, transform, transition } =
         useSortable({ id });
@@ -45,21 +49,30 @@ const NotesListClient = ({
       const style: React.CSSProperties = {
         transition,
         transform: CSS.Transform.toString(transform),
+        cursor: isDragging ? "grabbing" : "grab",
+      };
+
+      const handleClick = (e: React.MouseEvent) => {
+        // ⛔️ Block link if still dragging or right after drag
+        if (isDragging || dragEndedRecently) {
+          e.preventDefault();
+          e.stopPropagation();
+        }
       };
 
       return (
         <li
-          key={id}
           ref={setNodeRef}
           {...attributes}
           {...listeners}
           style={style}
-          className="bg-[#232323] flex rounded-sm overflow-hidden"
+          className="bg-[#232323] flex rounded-sm overflow-hidden select-none"
+          key={id}
         >
           <Link
             href={`/${category}/${id}`}
             className="p-4 flex flex-col gap-2.5 basis-full"
-            onClick={(e) => isDragging && e.preventDefault()}
+            onClick={handleClick}
           >
             <h3 className="text-primary font-semibold text-lg leading-[24px]">
               {note.title}
@@ -76,21 +89,32 @@ const NotesListClient = ({
     });
   };
 
+  useEffect(() => {
+    // cleanup on unmount
+    return () => {
+      if (dragTimeout.current) clearTimeout(dragTimeout.current);
+    };
+  }, []);
+
   return (
     <section className={className}>
       <h2 className="text-primary font-semibold text-xl">{title}</h2>
-
       {!notesArray.length && (
         <h6 className="font-semibold text-primary">Empty notes</h6>
       )}
-
       <DndContext
         sensors={sensors}
         collisionDetection={closestCorners}
         onDragStart={() => setIsDragging(true)}
         onDragEnd={(event) => {
           setIsDragging(false);
-          handleDragEnd?.(event);
+          setDragEndedRecently(true);
+          if (dragTimeout.current) clearTimeout(dragTimeout.current);
+          dragTimeout.current = setTimeout(
+            () => setDragEndedRecently(false),
+            150
+          );
+          handleDragEnd(event);
         }}
         onDragCancel={() => setIsDragging(false)}
       >
@@ -107,4 +131,4 @@ const NotesListClient = ({
   );
 };
 
-export default NotesListClient;
+export default NotesList;

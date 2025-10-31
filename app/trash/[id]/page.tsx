@@ -3,8 +3,8 @@ import Page from "@/app/components/ui/Page.client";
 const TrashNote = async ({ params }: { params: Promise<{ id: string }> }) => {
   const { id } = await params;
 
-  const recoverUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/trash/${id}`;
-  const trashUrl = `${process.env.NEXT_PUBLIC_API_URL}/api/trash/${id}`;
+  const recoverUrl = `${process.env.NEXT_PUBLIC_API_URL}api/trash/${id}`;
+  const trashUrl = `${process.env.NEXT_PUBLIC_API_URL}api/trash/${id}`;
 
   const dropdown_children = [
     {

@@ -1,6 +1,6 @@
 // ?? Moving note to different folders utility function
 const URLAction = (parentURL: string, folderURL: string, id: string) => {
-  return `${process.env.NEXT_PUBLIC_API_URL}/api/${parentURL}/${folderURL}/${id}`;
+  return `${process.env.NEXT_PUBLIC_API_URL}api/${parentURL}/${folderURL}/${id}`;
 };
 
 // ?? Font size resizing in note description

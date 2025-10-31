@@ -30,7 +30,7 @@ const createNote = async ({ formData, email }: NoteFormData) => {
     throw new Error("Missing required fields");
   }
 
-  const url = `${process.env.NEXT_PUBLIC_API_URL}/api/${folder}/`;
+  const url = `${process.env.NEXT_PUBLIC_API_URL}api/${folder}/`;
   const res = await fetch(url, {
     method: "POST",
     headers: {

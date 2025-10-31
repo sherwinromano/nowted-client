@@ -94,7 +94,7 @@ const EditButtons = ({
   const handleUpdate = async () => {
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/${folder}/${id}`,
+        `${process.env.NEXT_PUBLIC_API_URL}api/${folder}/${id}`,
         {
           method: "PATCH",
           headers: {

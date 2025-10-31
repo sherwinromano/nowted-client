@@ -47,7 +47,7 @@ const DesktopLayout = ({ title, category, children }: LayoutProps) => {
         updated.splice(newIndex, 0, moved);
 
         // Update server order
-        fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/${category}/reorder`, {
+        fetch(`${process.env.NEXT_PUBLIC_API_URL}api/${category}/reorder`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",

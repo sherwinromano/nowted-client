@@ -70,13 +70,13 @@ const MobileLayout = ({ title, category, children }: LayoutProps) => {
 
   useEffect(() => {
     fetchNotes();
-  }, [session, category]);
+  }, [fetchNotes]);
 
   useEffect(() => {
     const handleRefresh = () => fetchNotes();
     window.addEventListener("refreshNotes", handleRefresh);
     return () => window.removeEventListener("refreshNotes", handleRefresh);
-  }, [session, category]);
+  }, [fetchNotes]);
 
   if (status === "loading")
     return <DesktopLoader parentStyle="xs:grid lg:hidden" />;

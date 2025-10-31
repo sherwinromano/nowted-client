@@ -1,6 +1,8 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { NotesListProps, NoteCardProps } from "@/app/types";
 import {
@@ -25,9 +27,6 @@ const NotesList = ({
   className,
 }: NotesListProps) => {
   const [isDragging, setIsDragging] = useState(false);
-  const [dragEndedRecently, setDragEndedRecently] = useState(false);
-  const dragTimeout = useRef<NodeJS.Timeout | null>(null);
-
   const notesArray = Array.isArray(notes) ? notes : [];
   const sensors = useSensors(
     useSensor(MouseSensor, {
@@ -49,15 +48,6 @@ const NotesList = ({
       const style: React.CSSProperties = {
         transition,
         transform: CSS.Transform.toString(transform),
-        cursor: isDragging ? "grabbing" : "grab",
-      };
-
-      const handleClick = (e: React.MouseEvent) => {
-        // ⛔️ Block link if still dragging or right after drag
-        if (isDragging || dragEndedRecently) {
-          e.preventDefault();
-          e.stopPropagation();
-        }
       };
 
       return (
@@ -66,13 +56,17 @@ const NotesList = ({
           {...attributes}
           {...listeners}
           style={style}
-          className="bg-[#232323] flex rounded-sm overflow-hidden select-none"
+          className="bg-[#232323] flex rounded-sm overflow-hidden"
           key={id}
         >
           <Link
             href={`/${category}/${id}`}
             className="p-4 flex flex-col gap-2.5 basis-full"
-            onClick={handleClick}
+            onClick={(e) => {
+              if (isDragging) {
+                e.preventDefault();
+              }
+            }}
           >
             <h3 className="text-primary font-semibold text-lg leading-[24px]">
               {note.title}
@@ -89,13 +83,6 @@ const NotesList = ({
     });
   };
 
-  useEffect(() => {
-    // cleanup on unmount
-    return () => {
-      if (dragTimeout.current) clearTimeout(dragTimeout.current);
-    };
-  }, []);
-
   return (
     <section className={className}>
       <h2 className="text-primary font-semibold text-xl">{title}</h2>
@@ -108,12 +95,6 @@ const NotesList = ({
         onDragStart={() => setIsDragging(true)}
         onDragEnd={(event) => {
           setIsDragging(false);
-          setDragEndedRecently(true);
-          if (dragTimeout.current) clearTimeout(dragTimeout.current);
-          dragTimeout.current = setTimeout(
-            () => setDragEndedRecently(false),
-            150
-          );
           handleDragEnd(event);
         }}
         onDragCancel={() => setIsDragging(false)}

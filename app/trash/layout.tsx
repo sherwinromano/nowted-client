@@ -1,16 +1,17 @@
-import NotesList from "../components/ui/NotesList";
+import React from "react";
+import DesktopLayout from "../components/layout/DesktopLayout";
+import MobileLayout from "../components/layout/MobileLayout";
 
-const TrashLayout = async ({ children }: { children: React.ReactNode }) => {
-  const req = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/trash`, {
-    cache: "no-store",
-  });
-  const notes = await req.json();
-
+const TrashLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <section className="flex basis-full">
-      <NotesList title="Trash" category="trash" notes={notes} />
-      {children}
-    </section>
+    <>
+      <DesktopLayout title="Trash" category="trash">
+        {children}
+      </DesktopLayout>
+      <MobileLayout title="Trash" category="trash">
+        {children}
+      </MobileLayout>
+    </>
   );
 };
 

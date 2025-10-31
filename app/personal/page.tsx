@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const Personal = () => {
   return (
-    <div className="xs:hidden lg:flex flex-col justify-center items-center basis-full">
+    <section className="xs:hidden lg:flex flex-col justify-center items-center basis-full">
       <div className="flex flex-col items-center gap-2.5 w-1/2">
         <Image src={"/note.svg"} alt="Note icon" width={65} height={65} />
         <div className="flex flex-col items-center gap-2.5">
@@ -15,7 +15,7 @@ const Personal = () => {
           </p>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

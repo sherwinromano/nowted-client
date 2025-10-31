@@ -2,17 +2,17 @@ import React from "react";
 import DesktopLayout from "../components/layout/DesktopLayout";
 import MobileLayout from "../components/layout/MobileLayout";
 
-const WorkLayout = ({ children }: { children: React.ReactNode }) => {
+const ArchivedLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <>
-      <DesktopLayout title="Work" category="work">
+      <DesktopLayout title="Archived notes" category="archived">
         {children}
       </DesktopLayout>
-      <MobileLayout title="Work" category="work">
+      <MobileLayout title="Archived notes" category="archived">
         {children}
       </MobileLayout>
     </>
   );
 };
 
-export default WorkLayout;
+export default ArchivedLayout;

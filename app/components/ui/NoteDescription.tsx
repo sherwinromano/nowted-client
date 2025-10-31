@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { EditButtonProps, FontSizeDropdownProps } from "@/app/types";
 import { getFontSizeClass } from "@/app/utils";
+import { useSession } from "next-auth/react";
 
 const NoteDescription = ({ note }: { note: string }) => {
   const fontSizes = ["XS", "S", "M", "L", "XL"];
@@ -91,6 +92,8 @@ const EditButtons = ({
   updatedNote,
 }: EditButtonProps) => {
   const router = useRouter();
+  const { data: session } = useSession();
+
   const handleUpdate = async () => {
     try {
       const res = await fetch(
@@ -99,6 +102,7 @@ const EditButtons = ({
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
+            "x-user-email": session?.user?.email || "",
           },
           body: JSON.stringify({ description: updatedNote }),
         }
@@ -106,6 +110,8 @@ const EditButtons = ({
 
       if (!res.ok) throw new Error("Failed to update note");
       setEditMode(false);
+
+      window.dispatchEvent(new Event("refreshNotes"));
       router.refresh();
     } catch (err) {
       console.error(err);

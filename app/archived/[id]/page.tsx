@@ -1,7 +1,7 @@
 import Page from "@/app/components/ui/Page.client";
 import { URLAction } from "@/app/utils";
 
-const FavoriteNote = async ({
+const ArchivedNote = async ({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -9,22 +9,12 @@ const FavoriteNote = async ({
   const { id } = await params;
   const dropdown_children = [
     {
-      label: "Archived",
-      image: {
-        src: "/doc-box.svg",
-        alt: "Doc box icon",
-      },
-      action: URLAction("favorites", "archived", id),
-      method: "POST",
-      path: "/archived",
-    },
-    {
       label: "Trash",
       image: {
         src: "/trash-bin.svg",
         alt: "Trash bin icon",
       },
-      action: URLAction("favorites", "trash", id),
+      action: URLAction("archived", "trash", id),
       method: "DELETE",
       path: "/trash",
     },
@@ -32,12 +22,12 @@ const FavoriteNote = async ({
 
   return (
     <Page
-      title="Favorites"
+      title="Archived notes"
       id={id}
-      category="favorites"
+      category="archived"
       dropdown_children={dropdown_children}
     />
   );
 };
 
-export default FavoriteNote;
+export default ArchivedNote;

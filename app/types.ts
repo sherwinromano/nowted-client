@@ -11,7 +11,7 @@ type DropdownItem = {
   path: string;
 };
 
-type Note = {
+export type Note = {
   id: number;
   title: string;
   date: string;
@@ -21,7 +21,6 @@ type Note = {
 export type LayoutProps = {
   title: string;
   category: string;
-  notes: Notes;
   children: React.ReactNode;
 };
 
@@ -32,7 +31,8 @@ export type DropdownChildrenProps = {
 export type NotesListProps = {
   title: string;
   category: string;
-  notes: Note[];
+  notes?: Note[];
+  handleDragEnd: (event: any) => void;
   className: string;
 };
 
@@ -40,7 +40,6 @@ export type Notes = Note[];
 
 export type NoteCardProps = {
   notes: Note[];
-  category: string;
 };
 
 export type EditButtonProps = {

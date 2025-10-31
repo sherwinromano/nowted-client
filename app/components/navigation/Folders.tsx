@@ -32,7 +32,7 @@ const Folders = () => {
             <Link
               href={link.url}
               className={clsx(
-                "flex items-center gap-3.5 basis-full px-4 py-2",
+                "flex items-center gap-3.5 basis-full xs:px-3 lg:px-4 py-2",
                 isActive ? "bg-active-link" : null
               )}
             >

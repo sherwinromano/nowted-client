@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import clsx from "clsx";
 import Folders from "../navigation/Folders";
 import More from "../navigation/More";
+import { authSignOut } from "@/app/actions";
 
 type SidebarEventProp = {
   openSidebar: boolean;
@@ -71,7 +72,7 @@ const Sidebar = ({ openSidebar, setOpenSidebar }: SidebarEventProp) => {
           <Image src={"/x-mark.svg"} alt="Close" height={24} width={24} />
         </button>
 
-        <nav className="flex flex-col">
+        <nav className="flex flex-col h-full">
           <div className="flex flex-col gap-3 mt-4">
             <h2 className="text-sm font-semibold">Folders</h2>
             <Folders />
@@ -93,6 +94,18 @@ const Sidebar = ({ openSidebar, setOpenSidebar }: SidebarEventProp) => {
             </Link>
           </button>
         </nav>
+        <button
+          className="flex items-center justify-center gap-2 bg-red-500 py-2 px-4 rounded-md cursor-pointer self-end"
+          onClick={() => authSignOut()}
+        >
+          <Image
+            src={"/arrow-left-start.svg"}
+            alt="Arrow left start icon"
+            width={24}
+            height={24}
+          />
+          <span className="text-sm text-primary font-medium">Sign Out</span>
+        </button>
       </aside>
     </>
   );

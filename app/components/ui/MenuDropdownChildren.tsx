@@ -3,15 +3,23 @@
 import { DropdownChildrenProps } from "@/app/types";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const MenuDropdownChildren = ({ dropdown_children }: DropdownChildrenProps) => {
   const router = useRouter();
+  const { data: session } = useSession();
 
   const handleClick = async (url: string, method: string, path: string) => {
     try {
-      const res = await fetch(url, { method: method });
+      const res = await fetch(url, {
+        method,
+        headers: {
+          "Content-Type": "application/json",
+          "x-user-email": session?.user?.email || "",
+        },
+      });
       if (!res.ok) throw new Error("Request failed");
-      // optionally update UI / show toast / revalidate
+
       router.push(path);
       router.refresh();
     } catch (err) {

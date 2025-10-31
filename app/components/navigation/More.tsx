@@ -1,14 +1,21 @@
-/* Component for more options link in navigation */
-
 "use client";
 
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { clsx } from "clsx";
+import { useState, useEffect } from "react";
 
 const More = () => {
   const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   const links = [
     {
       name: "Favorites",
@@ -24,7 +31,7 @@ const More = () => {
     },
     {
       name: "Archived Notes",
-      url: "/archived-notes",
+      url: "/archived",
       image_src: "/doc-box.svg",
       image_alt: "Document box icon",
     },
@@ -41,7 +48,7 @@ const More = () => {
             <Link
               href={link.url}
               className={clsx(
-                "flex items-center gap-3.5 basis-full px-4 py-2",
+                "flex items-center gap-3.5 basis-full xs:px-3 lg:px-4 py-2",
                 isActive ? "bg-active-link" : null
               )}
             >

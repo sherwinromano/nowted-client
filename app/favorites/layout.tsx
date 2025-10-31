@@ -1,16 +1,17 @@
-import NotesList from "../components/ui/NotesList";
+import React from "react";
+import DesktopLayout from "../components/layout/DesktopLayout";
+import MobileLayout from "../components/layout/MobileLayout";
 
-const FavoritesLayout = async ({ children }: { children: React.ReactNode }) => {
-  const req = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/favorites`, {
-    cache: "no-store",
-  });
-  const notes = await req.json();
-
+const FavoritesLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <section className="flex basis-full">
-      <NotesList title="Favorites" category="favorites" notes={notes} />
-      {children}
-    </section>
+    <>
+      <DesktopLayout title="Favorites" category="favorites">
+        {children}
+      </DesktopLayout>
+      <MobileLayout title="Favorites" category="favorites">
+        {children}
+      </MobileLayout>
+    </>
   );
 };
 

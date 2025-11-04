@@ -21,4 +21,19 @@ const getFontSizeClass = (fontSize: string) => {
   }
 };
 
+export const trimText = (text: string, length: number): string => {
+  if (!text) return "";
+  return text.length > length ? text.slice(0, length) + "..." : text;
+};
+
+export const getTrimLength = (): number => {
+  if (typeof window === "undefined") return 17;
+  const width = window.innerWidth;
+
+  if (width < 640) return 32;
+  if (width < 768) return 83;
+  if (width < 1024) return 110;
+  return 17;
+};
+
 export { URLAction, getFontSizeClass };

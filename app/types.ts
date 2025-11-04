@@ -34,6 +34,7 @@ export type NotesListProps = {
   category: string;
   notes?: Note[];
   handleDragEnd: (event: DragEndEvent) => void;
+  loading: boolean;
   className: string;
 };
 

@@ -6,13 +6,14 @@ import { usePathname } from "next/navigation";
 import { useState, useEffect, useCallback } from "react";
 import { SessionContextValue, useSession } from "next-auth/react";
 import NotesList from "../ui/NotesList";
-import DesktopLoader from "../ui/Loader";
+import Loader from "../ui/Loader";
 import { DragEndEvent } from "@dnd-kit/core";
 
 const MobileLayout = ({ title, category, children }: LayoutProps) => {
   const pathname = usePathname() ?? "";
   const segments = pathname.split("/").filter(Boolean);
   const [notes, setNotes] = useState<Note[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const { data: session, status }: SessionContextValue = useSession();
 
   // hide list when route is /{category}/{id}
@@ -36,6 +37,8 @@ const MobileLayout = ({ title, category, children }: LayoutProps) => {
       setNotes(data);
     } catch (err) {
       console.error("Error fetching notes:", err);
+    } finally {
+      setIsLoading(false);
     }
   }, [session?.user?.email, category]);
 
@@ -70,7 +73,7 @@ const MobileLayout = ({ title, category, children }: LayoutProps) => {
 
   useEffect(() => {
     fetchNotes();
-  }, [fetchNotes]);
+  }, [status, fetchNotes]);
 
   useEffect(() => {
     const handleRefresh = () => fetchNotes();
@@ -78,8 +81,7 @@ const MobileLayout = ({ title, category, children }: LayoutProps) => {
     return () => window.removeEventListener("refreshNotes", handleRefresh);
   }, [fetchNotes]);
 
-  if (status === "loading")
-    return <DesktopLoader parentStyle="xs:grid lg:hidden" />;
+  if (status === "loading") return <Loader parentStyle="xs:grid lg:hidden" />;
 
   return (
     <section className="xs:flex flex-col xs:p-5 md:p-7 lg:hidden basis-full gap-7">
@@ -87,6 +89,7 @@ const MobileLayout = ({ title, category, children }: LayoutProps) => {
 
       {!opened_dynamic_route && (
         <NotesList
+          loading={isLoading}
           title={title}
           category={category}
           notes={notes}

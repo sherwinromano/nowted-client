@@ -10,6 +10,7 @@ import { DragEndEvent } from "@dnd-kit/core";
 const DesktopLayout = ({ title, category, children }: LayoutProps) => {
   const { data: session, status } = useSession();
   const [notes, setNotes] = useState<Note[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   const fetchNotes = useCallback(async () => {
     if (!session?.user?.email) return;
@@ -29,6 +30,8 @@ const DesktopLayout = ({ title, category, children }: LayoutProps) => {
       setNotes(data);
     } catch (err) {
       console.error("Error fetching notes:", err);
+    } finally {
+      setIsLoading(false);
     }
   }, [session?.user?.email, category]);
 
@@ -77,6 +80,7 @@ const DesktopLayout = ({ title, category, children }: LayoutProps) => {
   return (
     <section className="xs:hidden lg:flex basis-full">
       <NotesList
+        loading={isLoading}
         title={title}
         category={category}
         notes={notes}

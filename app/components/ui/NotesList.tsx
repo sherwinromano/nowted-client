@@ -18,11 +18,14 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import SkeletonGroup from "./SkeletonGroup";
+import { getTrimLength, trimText } from "@/app/utils";
 
 const NotesList = ({
   title,
   category,
   notes,
+  loading,
   handleDragEnd,
   className,
 }: NotesListProps) => {
@@ -37,9 +40,12 @@ const NotesList = ({
   );
 
   const NoteCard = ({ notes }: NoteCardProps) => {
+    const trim_text = (text: string, length: number) => {
+      return text.length > 15 ? text.slice(0, length) + "..." : text;
+    };
+
     return notes.map((note) => {
-      const text = note.description ?? "";
-      const shortText = text.length > 15 ? text.slice(0, 15) + "..." : text;
+      const description = note.description ?? "";
       const id = note.id;
 
       const { attributes, listeners, setNodeRef, transform, transition } =
@@ -73,8 +79,9 @@ const NotesList = ({
             </h3>
             <div className="flex items-center gap-2.5">
               <span className="text-tertiary">{note.date}</span>
-              <p className="text-secondary flex-1 min-w-0 truncate">
-                {shortText}
+
+              <p className="text-secondary">
+                {trimText(description, getTrimLength())}
               </p>
             </div>
           </Link>
@@ -86,28 +93,33 @@ const NotesList = ({
   return (
     <section className={className}>
       <h2 className="text-primary font-semibold text-xl">{title}</h2>
-      {!notesArray.length && (
-        <h6 className="font-semibold text-primary">Empty notes</h6>
-      )}
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCorners}
-        onDragStart={() => setIsDragging(true)}
-        onDragEnd={(event) => {
-          setIsDragging(false);
-          handleDragEnd(event);
-        }}
-        onDragCancel={() => setIsDragging(false)}
-      >
-        <SortableContext
-          items={notesArray.map((n) => n.id)}
-          strategy={verticalListSortingStrategy}
+      {loading ? (
+        <SkeletonGroup />
+      ) : notesArray.length === 0 ? (
+        <section className="h-full grid place-items-center">
+          <p className="text-primary font-semibold">Empty notes</p>
+        </section>
+      ) : (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCorners}
+          onDragStart={() => setIsDragging(true)}
+          onDragEnd={(event) => {
+            setIsDragging(false);
+            handleDragEnd(event);
+          }}
+          onDragCancel={() => setIsDragging(false)}
         >
-          <ul className="flex flex-col gap-4 overflow-y-auto overflow-x-hidden scrollbar-hide h-full">
-            <NoteCard notes={notesArray} />
-          </ul>
-        </SortableContext>
-      </DndContext>
+          <SortableContext
+            items={notesArray.map((n) => n.id)}
+            strategy={verticalListSortingStrategy}
+          >
+            <ul className="flex flex-col gap-4 overflow-y-auto overflow-x-hidden scrollbar-hide h-full">
+              <NoteCard notes={notesArray} />
+            </ul>
+          </SortableContext>
+        </DndContext>
+      )}
     </section>
   );
 };

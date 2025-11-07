@@ -40,10 +40,6 @@ const NotesList = ({
   );
 
   const NoteCard = ({ notes }: NoteCardProps) => {
-    const trim_text = (text: string, length: number) => {
-      return text.length > 15 ? text.slice(0, length) + "..." : text;
-    };
-
     return notes.map((note) => {
       const description = note.description ?? "";
       const id = note.id;

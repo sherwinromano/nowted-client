@@ -61,7 +61,6 @@ const Page = ({ title, id, category, dropdown_children }: PageProps) => {
         const data: Note = await res.json();
         setNote(data);
       } catch (err) {
-        // ✅ Type-safe error handling
         if (err instanceof Error) {
           console.error("Fetch error:", err.message);
         } else {
@@ -71,7 +70,7 @@ const Page = ({ title, id, category, dropdown_children }: PageProps) => {
     };
 
     fetchNote();
-  }, [id, category, session, status]); // ✅ added `category`
+  }, [id, category, session, status]);
 
   return (
     <section className="basis-full xs:p-0 lg:p-7 flex flex-col gap-7">

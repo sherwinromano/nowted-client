@@ -85,7 +85,7 @@ const DesktopLayout = ({ title, category, children }: LayoutProps) => {
         category={category}
         notes={notes}
         handleDragEnd={handleDragEnd}
-        className="flex bg-secondary h-full basis-[40%] py-7 px-5 flex-col gap-7"
+        className="flex bg-secondary h-full basis-[28rem] py-7 px-5 flex-col gap-7"
       />
       {children}
     </section>

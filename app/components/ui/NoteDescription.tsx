@@ -10,6 +10,8 @@ import Image from "next/image";
 import { EditButtonProps, FontSizeDropdownProps } from "@/app/types";
 import { getFontSizeClass } from "@/app/utils";
 import { useSession } from "next-auth/react";
+import { useFormStatus } from "react-dom";
+import { Spinner } from "./spinner";
 
 const NoteDescription = ({ note }: { note: string }) => {
   const fontSizes = ["XS", "S", "M", "L", "XL"];
@@ -67,9 +69,9 @@ const NoteDescription = ({ note }: { note: string }) => {
               "text-primary leading-[28px] xs:text-base h-fit",
               getFontSizeClass(fontSize),
               {
-                "lg:font-bold": isBold,
-                "lg:italic": isItalic,
-                "lg:underline": isUnderline,
+                "font-bold": isBold,
+                italic: isItalic,
+                underline: isUnderline,
               }
             )}
           >
@@ -116,13 +118,9 @@ const EditButtons = ({
   };
 
   return editMode ? (
-    <button
-      className="border flex items-center gap-3 px-4 py-2 border-[#2f2f2f] rounded-sm cursor-pointer"
-      onClick={handleUpdate}
-    >
-      <Image src={"/save.svg"} alt="Save icon" height={20} width={20} />
-      <span className="text-primary text-sm">Save</span>
-    </button>
+    <form action={handleUpdate}>
+      <SaveButton />
+    </form>
   ) : (
     <button
       className="border flex items-center gap-3 px-4 py-2 border-[#2f2f2f] rounded-sm cursor-pointer"
@@ -156,6 +154,22 @@ const FontSizeDropdown = ({
         );
       })}
     </ul>
+  );
+};
+
+const SaveButton = () => {
+  const { pending } = useFormStatus();
+  return (
+    <button className="border flex items-center gap-3 px-4 py-2 border-[#2f2f2f] rounded-sm cursor-pointer">
+      {pending ? (
+        <Spinner className="text-primary size-5" />
+      ) : (
+        <Image src={"/save.svg"} alt="Save icon" height={20} width={20} />
+      )}
+      <span className="text-primary text-sm">
+        {pending ? "Saving" : "Save"}
+      </span>
+    </button>
   );
 };
 

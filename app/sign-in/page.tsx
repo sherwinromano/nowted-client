@@ -2,6 +2,9 @@
 
 import Image from "next/image";
 import { signInWithGithub, signInWithGoogle } from "../actions";
+import { useFormStatus } from "react-dom";
+import clsx from "clsx";
+import { Spinner } from "../components/ui/spinner";
 
 type SignInButtonProps = {
   icon: string;
@@ -39,27 +42,37 @@ const SignIn = () => {
 
 const SignInButtons = ({ signInButtons }: SignInButtonProp) => {
   return (
-    <div className="flex flex-col gap-2 w-full">
-      {signInButtons.map((item) => {
-        return (
-          <button
-            className="flex justify-center items-center gap-4 bg-secondary py-3 px-4 rounded-full cursor-pointer border border-[#2f2f2f]"
-            key={item.label}
-            onClick={() => item.action?.()}
-          >
-            <Image
-              src={item.icon}
-              alt="Sign button icon"
-              width={item.label === "Github" ? 30 : 25}
-              height={item.label === "Github" ? 50 : 25}
-            />
-            <p className="xs:text-sm sm:text-base font-semibold text-primary">
-              {item.label}
-            </p>
-          </button>
-        );
-      })}
+    <div className="flex flex-col gap-4 w-full">
+      {signInButtons.map((item) => (
+        <form action={item.action} key={item.label} className="w-full">
+          <SignInButton icon={item.icon} label={item.label} />
+        </form>
+      ))}
     </div>
+  );
+};
+
+const SignInButton = ({ icon, label }: { icon: string; label: string }) => {
+  const { pending } = useFormStatus();
+
+  return (
+    <button
+      type="submit"
+      disabled={pending}
+      className={clsx(
+        "flex justify-center items-center gap-4 bg-secondary py-3 px-4 rounded-full border border-[#2f2f2f] transition-all w-full cursor-pointer",
+        pending ? "opacity-70 cursor-not-allowed" : ""
+      )}
+    >
+      {pending ? (
+        <Spinner className="text-primary size-4" />
+      ) : (
+        <Image src={icon} alt={`${label} icon`} width={25} height={25} />
+      )}
+      <p className="xs:text-sm sm:text-base font-semibold text-primary">
+        {pending ? `Signing in` : label}
+      </p>
+    </button>
   );
 };
 

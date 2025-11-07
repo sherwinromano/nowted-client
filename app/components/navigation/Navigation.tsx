@@ -6,6 +6,7 @@ import More from "./More";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { authSignOut } from "@/app/actions";
+import SignOutButton from "../ui/SignOutButton";
 
 const Navigation = () => {
   const pathname = usePathname();
@@ -43,18 +44,9 @@ const Navigation = () => {
           <More />
         </div>
       </div>
-      <button
-        className="flex items-center justify-center gap-2 bg-red-500 py-2 px-4 rounded-md cursor-pointer self-start ml-4"
-        onClick={() => authSignOut()}
-      >
-        <Image
-          src={"/arrow-left-start.svg"}
-          alt="Arrow left start icon"
-          width={24}
-          height={24}
-        />
-        <span className="text-sm text-primary font-medium">Sign Out</span>
-      </button>
+      <form className="self-start ml-4" action={authSignOut}>
+        <SignOutButton />
+      </form>
     </nav>
   );
 };
